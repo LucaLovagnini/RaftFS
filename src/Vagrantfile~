@@ -1,0 +1,66 @@
+# -*- mode: ruby -*-
+# # vi: set ft=ruby :
+ 
+# Specify minimum Vagrant version and Vagrant API version
+Vagrant.require_version ">= 1.6.0"
+VAGRANTFILE_API_VERSION = "2"
+
+# Require YAML module
+require 'yaml'
+ 
+# Read YAML file with box details
+servers = YAML.load_file('RaftFS/servers.yaml')
+ 
+#The enviorment variable MACHINE is used in order to define which VM to build. Possible values:
+# all: all the machines (client VM included) are built
+# client: only the client VM is built
+# [name]: (where name is a key contained in servers.yaml) build only [name] VM
+
+# Create boxes
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+# Create servers
+
+  if ENV['MACHINE'] != "client"
+	  # Iterate through entries in YAML file
+	  servers.each do |key,value|
+		# If the key is the MACHINE that we want to define or we want to define ALL the machines
+		if (key == ENV['MACHINE'] || ENV['MACHINE'] == "all") && key!="RaftArgs"
+			config.vm.define key do |srv|
+				srv.vm.box = value['box']
+		      		#srv.vm.network "private_network", ip: value['ip']
+				if value['ip'] != ''
+				    srv.vm.provision "shell", inline: "echo NO IP ADDRESS"
+				    srv.vm.network :public_network, bridge:'wlan0'
+				else        
+		    		    srv.vm.network :public_network, ip:value['ip'] ,bridge:'wlan0'
+		    		    srv.vm.provision "shell", inline: "echo IP FOUND FOR"
+				end
+				srv.vm.hostname=key
+				srv.vm.synced_folder ".", "/vagrant" , disabled:true
+				srv.vm.synced_folder "ServersFS", "/vagrant/ServersFS" , create: true
+				srv.vm.synced_folder "./RaftFS", "/vagrant/RaftFS"
+				srv.vm.provision :shell do |shell|
+				  shell.path = "provision.sh"
+				  shell.args = "'TRUE'"
+			  	end
+				srv.vm.provider :virtualbox do |vb|
+					vb.name = key
+					vb.memory = value['ram']
+			      	end
+			end
+		end
+	  end
+  end
+  if ENV['MACHINE'] == "client" || ENV['MACHINE'] == "all"
+	  config.vm.define "client" do |cln|
+		cln.vm.box = "hashicorp/precise32"
+		cln.vm.network :public_network, bridge:'wlan'
+		cln.vm.hostname="client"
+		cln.vm.provision :shell do |shell|
+		  shell.path = "provision.sh"
+		  shell.args = "'FALSE'"
+	  	end
+	  end
+  end
+end
+

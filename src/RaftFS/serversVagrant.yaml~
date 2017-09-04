@@ -1,0 +1,18 @@
+hal9000:
+     box: hashicorp/precise32
+     ram: 512
+     ip: 172.17.8.101
+     ftpPort: 8080
+     diskSpace: 500
+skynet:
+     box: hashicorp/precise32
+     ram: 512
+     ip: 172.17.8.102
+     ftpPort: 8081
+     diskSpace: 500
+jarvis:
+     box: hashicorp/precise32
+     ram: 512
+     ip: 172.17.8.103
+     ftpPort: 8083   
+     diskSpace: 500

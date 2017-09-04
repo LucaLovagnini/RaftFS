@@ -1,0 +1,12 @@
+pc-74b44be4385b:
+     box: hashicorp/precise32
+     ram: 512
+     ip: 192.168.1.193
+     ftpPort: 8080
+     diskSpace: 500
+jarvis:
+     box: hashicorp/precise32
+     ram: 512
+     ip: 192.168.1.9
+     ftpPort: 8081
+     diskSpace: 500

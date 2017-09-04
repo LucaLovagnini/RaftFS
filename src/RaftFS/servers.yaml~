@@ -1,0 +1,24 @@
+RaftArgs:
+     rmiTimeout: 100
+     replicationFactor: 3
+     lowerBoundElectionTimeout: 500
+     randomElectionTimeout: 1000
+     debugLvl: normal
+jarvis:
+     box: hashicorp/precise32
+     ram: 512
+     ip: 
+     ftpPort: 8080
+     diskSpace: 500000000
+skynet:
+     box: hashicorp/precise32
+     ram: 512
+     ip:
+     ftpPort: 8081
+     diskSpace: 500000000
+hal9000:
+     box: hashicorp/precise32
+     ram: 512
+     ip: 
+     ftpPort: 8083   
+     diskSpace: 500000000

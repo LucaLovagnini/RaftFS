@@ -1,0 +1,1 @@
+{"virtualbox":{"/vagrant/ServersFS":{"create":true,"guestpath":"/vagrant/ServersFS","hostpath":"/home/luca/Documents/PAD/ServersFS","disabled":false},"/vagrant/RaftFS":{"guestpath":"/vagrant/RaftFS","hostpath":"/home/luca/Documents/PAD/RaftFS","disabled":false}}}

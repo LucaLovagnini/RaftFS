@@ -1,0 +1,26 @@
+# -*- mode: ruby -*-
+# # vi: set ft=ruby :
+ 
+# Specify minimum Vagrant version and Vagrant API version
+Vagrant.require_version ">= 1.6.0"
+VAGRANTFILE_API_VERSION = "2"
+ 
+# Require YAML module
+require 'yaml'
+ 
+# Read YAML file with box details
+servers = YAML.load_file('RaftFS/servers.yaml')
+ 
+# Create boxes
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.define "client" do |cln|
+	cln.vm.box = "hashicorp/precise32"
+	cln.vm.network :public_network, bridge:'wlan0', ip:"192.168.1.140"
+	cln.vm.hostname="client"
+	cln.vm.provision :shell do |shell|
+	  shell.path = "provision.sh"
+	  shell.args = "'FALSE'"
+  	end
+  end
+end
+
